@@ -1,0 +1,94 @@
+def calcular_salario_bruto(salario_por_hora, horas_trabajadas):
+    if horas_trabajadas < 160:  # Cambio en la condición de comparación
+        return salario_por_hora * horas_trabajadas
+    elif horas_trabajadas <= 200:
+        return (160 * salario_por_hora) + ((horas_trabajadas - 160) * salario_por_hora * 1.5)
+    else:
+        return (160 * salario_por_hora) + (40 * salario_por_hora * 1.5) + ((horas_trabajadas - 200) * salario_por_hora * 2)
+
+def calcular_isr(salario_bruto):
+    if salario_bruto <= 746.04:
+        isr = salario_bruto * 0.0192
+    elif salario_bruto <= 6332.05:
+        isr = 14.32 + (salario_bruto - 746.04) * 0.064
+    elif salario_bruto <= 11128.01:
+        isr = 371.83 + (salario_bruto - 6332.05) * 0.1088
+    elif salario_bruto <= 12935.82:
+        isr = 893.63 + (salario_bruto - 11128.01) * 0.16
+    elif salario_bruto <= 15487.71:
+        isr = 1182.88 + (salario_bruto - 12935.82) * 0.1792
+    elif salario_bruto <= 31236.49:
+        isr = 1640.18 + (salario_bruto - 15487.71) * 0.2136
+    elif salario_bruto <= 49233.00:
+        isr = 5004.12 + (salario_bruto - 31236.49) * 0.2352
+    elif salario_bruto <= 93993.90:
+        isr = 9236.89 + (salario_bruto - 49233.00) * 0.30
+    elif salario_bruto <= 125325.20:
+        isr = 22665.17 + (salario_bruto - 93993.90) * 0.32
+    elif salario_bruto <= 375975.61:
+        isr = 32691.18 + (salario_bruto - 125325.20) * 0.34
+    else:
+        isr = 117912.32 + (salario_bruto - 375975.61) * 0.35
+    return isr
+
+def calcular_seguro_social(salario_bruto):
+    return salario_bruto * 0.025
+
+def calcular_ahorro(salario_bruto, tipo_ahorro):
+    if tipo_ahorro == 'fijo':
+        return 1000
+    elif tipo_ahorro == '3%':
+        return salario_bruto * 0.03
+    elif tipo_ahorro == '5%':
+        return salario_bruto * 0.05
+    return 0
+
+def calcular_fondo_retiro(salario_bruto, tipo_retiro):
+    if tipo_retiro == '1%':
+        return salario_bruto * 0.01
+    elif tipo_retiro == '2%':
+        return salario_bruto * 0.02
+    return 0
+
+# Solicitar entradas
+salario_por_hora = float(input("Ingresa tu salario por hora: "))
+horas_trabajadas = int(input("Ingresa las horas trabajadas este mes: "))
+tipo_ahorro = input("¿Que tipo de ahorro eliges? (fijo, 3%, 5%): ")  # Error gramatical en 'Que'
+tipo_retiro = input("¿Quieres ahorrar para el retiro? (ninguno, 1%, 2%): ")
+
+# Cálculos
+salario_bruto = calcular_salario_bruto(salario_por_hora, horas_trabajadas)
+isr = calcular_isr(salario_bruto)
+seguro_social = calcular_seguro_social(salario_bruto)
+ahorro = calcular_ahorro(salario_bruto, tipo_ahorro)
+fondo_retiro = calcular_fondo_retiro(salario_bruto, tipo_retiro)
+
+# Calcular sueldo neto
+sueldo_neto = salario_bruto - isr - seguro_social - ahorro - fondo_retiro
+
+# Mostrar resultados
+print(f"\nResumen de tu sueldo:")
+print(f"Salario bruto: ${salario_bruto:.2f}")
+print(f"ISR: ${isr:.2f}")
+print(f"Seguridad Social: ${seguro_social:.2f}")
+print(f"Ahorro: ${ahorro:.2f}")
+print(f"Fondo de retiro: ${fondo_retiro:.2f}")
+print(f"Sueldo neto: ${sueldo_neto:.2f}")
+
+
+'''
+Comentarios sobre el diseño del algoritmo
+El algoritmo está diseñado para ser claro y fácil de entender, utilizando funciones para calcular cada parte del sueldo de forma independiente. Esto mejora la organización y facilita la modificación del código. Las funciones principales son:
+
+Sueldo bruto: Se calcula según las horas trabajadas. Menos de 160 horas se paga el salario normal, entre 160 y 200 horas se pagan horas extras con un extra, y más de 200 horas se pagan al doble.
+ISR: Se calcula según una tabla progresiva que aplica un porcentaje sobre el exceso de cada rango de sueldo.
+Seguridad Social: Se descuenta un 2.5% del sueldo bruto.
+Ahorro de la empresa: Se calcula un descuento basado en un monto fijo de $1,000 o un porcentaje del sueldo.
+Ahorro para el retiro: El empleado puede elegir ahorrar un 1% o 2% de su sueldo.
+Sueldo neto: Es el sueldo bruto menos todas las deducciones.
+Comentarios sobre la implementación en Python
+El código está organizado en funciones, lo que lo hace fácil de entender y modificar. El programa solicita los datos necesarios al usuario y muestra un desglose claro del sueldo y las deducciones.
+
+Conclusión
+El programa es fácil de usar, interactivo y calcula el sueldo neto de manera clara y rápida, mostrando todas las deducciones. El uso de funciones hace que el código sea modular y fácil de modificar si es necesario.
+'''
